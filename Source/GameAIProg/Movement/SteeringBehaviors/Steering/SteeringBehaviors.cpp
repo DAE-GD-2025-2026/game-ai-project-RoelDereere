@@ -52,21 +52,28 @@ SteeringOutput Arrive::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
 
 SteeringOutput Face::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
 {
-	// SteeringOutput Steering{};
-	// FVector2D TargetVector{Target.Position - Agent.GetPosition()};
-	// TargetVector.Normalize();
-	// FVector2D ActorRightVector{Agent.GetActorRightVector().X,Agent.GetActorRightVector().Y};
-	// ActorRightVector.Normalize();
-	//
-	// float angularRotation = FVector2D::DotProduct(TargetVector,ActorRightVector);
-	//
-	// float steering = std::clamp(angularRotation, -1.0f, 1.0f);
-	// Steering.AngularVelocity = steering * Agent.GetMaxAngularSpeed();
-	// return Steering;
-	
+	constexpr float stopAngleDegrees = 0.5f;
+	constexpr float stopAngleRadiance = FMath::DegreesToRadians(stopAngleDegrees);
 	SteeringOutput Steering{};
-	Steering.LinearVelocity = Target.Position - Agent.GetPosition();
+	Steering.AngularVelocity = 0.f;
 	
-	Agent.SetMaxLinearSpeed(0.f);
+	FVector2D targetVector{Target.Position - Agent.GetPosition()};
+	
+	float desiredRotation = FMath::Atan2(targetVector.Y, targetVector.X);
+	float currentRotation = FMath::DegreesToRadians(Agent.GetActorRotation().Yaw);
+	
+	float deltaRotation = FMath::FindDeltaAngleRadians(currentRotation, desiredRotation);
+	
+	if (FMath::Abs(deltaRotation)<stopAngleRadiance) return Steering;
+
+	Steering.AngularVelocity = std::clamp(deltaRotation, -Agent.GetMaxAngularSpeed(), Agent.GetMaxAngularSpeed());
+
 	return Steering;
+	
+	
+	// SteeringOutput Steering{};
+	// Steering.LinearVelocity = Target.Position - Agent.GetPosition();
+	//
+	// Agent.SetMaxLinearSpeed(0.f);
+	// return Steering;
 }
