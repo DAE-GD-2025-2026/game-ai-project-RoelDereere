@@ -37,3 +37,32 @@ public:
 
 };
 
+class Flee :public ISteeringBehavior
+{
+public:
+	Flee() = default;
+	virtual ~Flee() = default;
+
+	virtual SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+};
+
+class Arrive : public ISteeringBehavior
+{
+public:
+	Arrive(float AgentMaxSpeed);
+	virtual ~Arrive() = default;
+
+	virtual SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+private:
+	float m_MaxSpeed;
+};
+
+class Face : public ISteeringBehavior
+{
+public:
+	Face() = default;
+	virtual ~Face() = default;
+	
+	virtual SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+};
+

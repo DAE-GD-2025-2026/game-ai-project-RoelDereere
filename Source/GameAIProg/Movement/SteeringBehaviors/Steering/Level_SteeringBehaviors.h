@@ -36,9 +36,10 @@ private:
 		Wander,
 		Flee,
 		Arrive,
+		Face,
 		Evade,
 		Pursuit,
-
+		
 		// @ End
 		Count
 	};
