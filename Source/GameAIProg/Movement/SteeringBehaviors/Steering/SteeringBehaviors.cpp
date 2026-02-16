@@ -32,6 +32,8 @@ Arrive::Arrive(float AgentMaxSpeed)
 }
 
 
+
+
 SteeringOutput Arrive::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
 {
 	const float breakRadius = 800.f;
@@ -76,4 +78,34 @@ SteeringOutput Face::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
 	//
 	// Agent.SetMaxLinearSpeed(0.f);
 	// return Steering;
+}
+
+SteeringOutput Pursuit::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
+{
+	SteeringOutput Steering{};
+	
+	FVector2D targetPosition = Target.Position;
+	FVector2D targetLinearVelocity = Target.LinearVelocity;
+	
+	FVector2D targetPositionPredict = Target.Position + Target.LinearVelocity * DeltaT;
+	
+	Steering.LinearVelocity = targetPositionPredict - Agent.GetPosition();
+	
+	
+	return Steering;
+}
+
+SteeringOutput Evade::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
+{
+	SteeringOutput Steering{};
+	
+	FVector2D targetPosition = Target.Position;
+	FVector2D targetLinearVelocity = Target.LinearVelocity;
+	
+	FVector2D targetPositionPredict = Target.Position + Target.LinearVelocity * DeltaT;
+	
+	Steering.LinearVelocity = Agent.GetPosition() - targetPositionPredict;
+	
+	
+	return Steering;
 }
