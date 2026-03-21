@@ -26,18 +26,22 @@ SteeringOutput Flee::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
 	return Steering;
 }
 
-Arrive::Arrive(float AgentMaxSpeed)
-	:m_MaxSpeed(AgentMaxSpeed)
+
+void Arrive::SetTargetRadius(float targetRadius)
 {
+	m_MaxSpeed = targetRadius;
 }
 
-
-
+void Arrive::SetMaxSpeed(float maxSpeed)
+{
+	m_MaxSpeed = maxSpeed;
+}
 
 SteeringOutput Arrive::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
 {
-	const float breakRadius = 800.f;
-	const float stopRadius = 300.f;
+	
+	const float stopRadius = m_MaxSpeed;
+	const float breakRadius = stopRadius+ 400.f;
 	SteeringOutput Steering{};
 	Steering.LinearVelocity = Target.Position - Agent.GetPosition();
 	

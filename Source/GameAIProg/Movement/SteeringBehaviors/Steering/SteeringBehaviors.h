@@ -49,12 +49,15 @@ public:
 class Arrive : public ISteeringBehavior
 {
 public:
-	Arrive(float AgentMaxSpeed);
+	Arrive() = default;
 	virtual ~Arrive() = default;
 
+	void SetTargetRadius(float targetRadius);
+	void SetMaxSpeed(float maxSpeed);
 	virtual SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
 private:
-	float m_MaxSpeed;
+	float m_MaxSpeed = 20.f;
+	float m_TargetRadius = 300.f;
 };
 
 class Face : public ISteeringBehavior
